@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>选择跳转路由</title>
+  <style>
+    /* 这里是 CSS 样式 */
+    body {
+      font-family: Arial, sans-serif; /* 添加一个常见的字体 */
+      background-image: url(https://picsum.photos/1920/1080); /* 使用一张背景图片 */
+      background-size: cover; /* 让图片自适应容器尺寸 */
+      padding: 0; /* 取消默认的 padding */
+      margin: 0; /* 取消默认的 margin */
+      height: 100vh; /* 将页面高度设置为视口高度，让页面占满整个屏幕 */
+      display: flex; /* 使用 flex 布局 */
+      justify-content: center; /* 主轴居中 */
+      align-items: center; /* 交叉轴居中 */
+    }
+    h1 {
+      font-size: 40px; /* 设置一个大号的标题文字 */
+      margin-bottom: 50px; /* 留下一些底部边距 */
+      text-align: center; /* 让标题居中显示 */
+      color: #fff; /* 字体颜色为白色 */
+      text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.5); /* 添加一些文字阴影 */
+    }
+    button {
+      background-color: #2196F3; /* 添加一个漂亮的蓝色背景色 */
+      color: white; /* 文字颜色为白色 */
+      padding: 10px 20px; /* 按钮边距 */
+      font-size: 20px; /* 字号 */
+      border: none; /* 边框为无 */
+      cursor: pointer; /* 光标为手指形 */
+      margin: 30px; /* 上下左右留一些边距 */
+      border-radius: 5px; /* 圆角 */
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3); /* 添加一些阴影 */
+      width: 200px; /* 宽度为 200px，使按钮看上去更加美观 */
+      height: 50px; /* 高度为 50px */
+      display: block; /* 设置为块元素，让按钮自动占用整行 */
+    }
+    @media only screen and (max-width: 768px) {
+      /* 在屏幕宽度小于 768px 时，将按钮的字体缩小一些 */
+      button {
+        font-size: 16px;
+        width: 150px; /* 宽度为 150px */
+        height: 40px; /* 高度为 40px */
+        margin: 10px; /* 上下左右留一些边距 */
+      }
+      h1 {
+        font-size: 30px; /* 设置一个稍小的标题字号 */
+        margin-bottom: 20px; /* 留下更少的底部边距 */
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <h1>选择跳转路由</h1>
+<button onclick="window.location.href='/game/hub/'">游戏</button>
+<button onclick="window.location.href='/study/hub/'">做题</button>
+</body>
+</html>

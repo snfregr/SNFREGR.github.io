@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Hub</title>
+
+    <style>
+        /* Button styles */
+        .btn {
+            font-size: 24px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 30px;
+            margin-right: 20px;
+            cursor: pointer;
+            color: #fff;
+            background-color: #4CAF50;
+        }
+
+        .btn:hover {
+            background-color: #3e8e41;
+        }
+
+        .btn:focus {
+            outline: none;
+        }
+
+        /* Container styles */
+        .container {
+            margin-top: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Game Hub!</h1>
+        <p>Choose a game to play:</p>
+        <button class="btn" onclick="location.href='/game/snake/'">贪吃蛇游戏</button>
+        <button class="btn" onclick="location.href='/game/tower/'">塔防游戏</button>
+        <button class="btn" onclick="location.href='/game/wuziqi/'">五子棋</button>
+    </div>
+</body>
+</html>

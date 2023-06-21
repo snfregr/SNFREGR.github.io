@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>请选择题目的难度</title>
+  <style>
+    /* 这里是 CSS 样式 */
+    body {
+      font-family: Arial, sans-serif; /* 添加一个常见的字体 */
+      background-color: #eee; /* 设置一个淡灰色的背景 */
+      padding: 20px; /* 添加一些页面边距 */
+      text-align: center; /* 让按钮居中显示 */
+    }
+    h1 {
+      font-size: 32px; /* 设置一个大号的标题文字 */
+      margin-bottom: 20px; /* 留下一些底部边距 */
+    }
+    button {
+      background-color: #4CAF50; /* 添加一个绿色的背景色 */
+      color: white; /* 文字颜色为白色 */
+      padding: 10px 20px; /* 按钮边距 */
+      font-size: 20px; /* 字号 */
+      border: none; /* 边框为无 */
+      cursor: pointer; /* 光标为手指形 */
+      margin: 10px; /* 上下左右留一些边距 */
+      border-radius: 5px; /* 圆角 */
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3); /* 添加一些阴影 */
+    }
+    @media only screen and (max-width: 768px) {
+      /* 在屏幕宽度小于 768px 时，将按钮的字体缩小一些 */
+      button {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>选择学习难度</h1>
+  <button onclick="location.href='/study/easy/'">容易(1年级水平)</button>
+  <button onclick="location.href='/study/hard/'">困难(父亲节限定)</button>
+</body>
+</html>

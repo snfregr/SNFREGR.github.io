@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>五年级难度的计算题页面</title>
+	<style>
+.wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 24px;
+    padding-right: 24px; /* 加上padding约束宽度 */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh; /* 修改最小高度 */
+    background-color: #f2f2f2;
+}
+
+.problem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    height: 80%;
+    max-width: 40%; /* 修改最大宽度 */
+}
+
+.problem h2 {
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.problem input[type="text"] {
+    padding: 10px;
+    font-size: 20px;
+    margin-bottom: 10px;
+    max-width: 90%;
+    text-transform: lowercase;
+    letter-spacing: 0.2em;
+}
+
+.problem input[type="text"]:not(:valid) {
+  border: 2px solid #f00;
+}
+
+.problem button {
+    padding: 10px 16px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #0073e6;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    max-width: 90%;
+}
+
+.problem button:hover {
+    background-color: #0059b3;
+}
+
+#result-text {
+    display: none;
+    margin-top: 10px;
+    color: #f00;
+    font-weight: bold;
+}
+
+.score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-left: 50px;
+    height: 80%;
+    max-width: 50%; /* 修改最大宽度 */
+}
+
+.score h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.score p {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.score span {
+    font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+    .wrapper {
+        flex-direction: column;
+        padding-left: 16px;
+        padding-right: 16px; /* 增加padding约束宽度 */
+    }
+
+    .score {
+        margin-top: 30px;
+        margin-left: 0;
+        max-width: 90%; /* 修改最大宽度 */
+    }
+
+    .problem {
+        height: 70%;
+        max-width: 50%; /* 修改最大宽度 */
+    }
+
+    .score {
+        height: 70%;
+        max-width: 90%; /* 修改最大宽度 */
+    }
+
+    .problem input[type="text"], .problem button {
+        font-size: 24px;
+        padding: 10px 16px;
+        max-width: 100%;
+    }
+}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="problem">
+			<h2 id="problem-text"></h2>
+			<input type="text" id="user-answer" placeholder="请输入你的答案...">
+			<button id="submit-btn" onclick="checkAnswer()">提交答案</button>
+			<p id="result-text"></p>
+		</div>
+		<div class="score">
+			<h2>计分板</h2>
+			<p>正确：<span id="correct-count">0</span></p>
+			<p>错误：<span id="wrong-count">0</span></p>
+			<p>正确率：<span id="accuracy">0.00%</span></p>
+		</div>
+	</div>
+	<script>
+		// 随机生成一个计算题
+function generateProblem() {
+  let operatorList = ['+-x', '+-÷', '-x+', 'x÷+'];
+  let operator = operatorList[Math.floor(Math.random() * operatorList.length)]; // 随机生成加减乘除运算符
+  let num1 = Math.floor(Math.random() * 1000); // 随机生成第一个随机数
+  let num2 = Math.floor(Math.random() * 1000); // 随机生成第二个随机数
+  let num3 = Math.floor(Math.random() * 1000); // 随机生成第二个随机数
+  let num4 = Math.floor(Math.random() * 1000); // 随机生成第二个随机数
+  let result = 0;
+  let problem = '';
+
+// 根据运算符生成计算式，并计算出正确答案
+switch (operator) {
+  case '+-x':
+    result = num1 + num2 - num3 * num4;
+    problem = `${num1} + ${num2} - ${num3} x ${num4}=`;
+    break;
+  case '-x+':
+    result = num1 - num2 * num3 + num4;
+    problem = `${num1} - ${num2} x ${num3} + ${num4}=`;
+    break;
+
+  case 'x÷+':
+    while (num3 === 0 || num2 % num3 !== 0) { // 确保 num2 非 0 并且 num1 整除 num2
+      num1 = Math.floor(Math.random() * 10000);
+      num2 = Math.floor(Math.random() * 100);
+    }
+    result = num1 * num2 / num3 + num4;
+    problem = `${num1} x ${num2} ÷ ${num3} + ${num4} =`;
+    break;
+  case '+-÷':
+    while (num4 === 0 || num3 % num4 !== 0) { // 确保 num2 非 0 并且 num1 整除 num2
+      num3 = Math.floor(Math.random() * 10000);
+      num4 = Math.floor(Math.random() * 100);
+    }
+    result = num1 + num2 - num3 / num4;
+    problem = `${num1} + ${num2} - ${num3} ÷ ${num4} =`;
+    break;
+}
+		  // 在页面上显示计算题
+  document.getElementById('problem-text').innerText = problem;
+
+  // 将正确答案存储到 input 元素的 data-result 属性中，用于验证用户的答案是否正确
+  document.getElementById('user-answer').setAttribute('data-result', result);
+  document.getElementById('user-answer').value = ''; // 清空用户输入框中的答案
+  document.getElementById('user-answer').focus(); // 让用户输入框获得焦点
+  document.getElementById('result-text').style.display = 'none'; // 隐藏答案是否正确的文本
+}
+
+// 检查用户提交的答案是否正确，并更新计分板
+function checkAnswer() {
+  // 禁用提交按钮
+  document.getElementById('submit-btn').setAttribute('disabled', 'true');
+
+  let userAnswer = document.getElementById('user-answer').value.trim().toLowerCase();
+  let cheatingCode = 'cheating-code:1495'; // 作弊关键字
+  let correctAnswer = parseFloat(document.getElementById('user-answer').getAttribute('data-result')); // 获取正确答案
+  let resultText = document.getElementById('result-text'); // 显示答案是否正确的文本
+  let correctCount = parseInt(document.getElementById('correct-count').innerText); // 计分板的正确次数
+  let wrongCount = parseInt(document.getElementById('wrong-count').innerText); // 计分板的错误次数
+  let accuracy = 0; // 计分板的正确率
+
+  // 校验用户输入是否为数字、cheating 或 code
+  if (/[^-\dcheatingcode.:]/g.test(userAnswer)) {
+    resultText.innerText = '请输入数字';
+    resultText.style.display = 'block';
+
+    // 启用提交按钮
+    document.getElementById('submit-btn').removeAttribute('disabled');
+    return;
+  }
+
+  // 如果包含作弊关键字，则将答案判定为正确答案
+  if (userAnswer === cheatingCode) {
+    resultText.innerText = `恭喜你，答案正确！正确答案是 ${correctAnswer}。`;
+    resultText.style.color = '#008000'; // 答案正确的文本显示为绿色
+    resultText.style.display = 'block';
+
+    // 更新计分板的正确次数
+    document.getElementById('correct-count').innerText = ++correctCount;
+  } else {
+    let userAnswerNum = parseFloat(userAnswer);
+
+
+const errorMessages = [
+  `行不行啊！答案是 ${correctAnswer}。`,
+  `这都答不出来？答案是 ${correctAnswer}。`,
+  `弱诶！答案是 ${correctAnswer}。`,
+  `LLL，正确答案是 ${correctAnswer}。`,
+  `行不行啊细狗，正确答案是 ${correctAnswer}。`,
+  `真的太逊了！正确答案是 ${correctAnswer}。`,
+  `拜托,你很弱诶,正确答案是 ${correctAnswer}。`,
+  `这个彬彬就是逊了！正确答案是 ${correctAnswer}。`,
+  `真的太逊了！正确答案是 ${correctAnswer}。`,
+  `嘲笑你！正确答案是 ${correctAnswer}。`,
+  `居然有人不会做啊！正确答案是 ${correctAnswer}。`,
+  `难度不够？LLL ${correctAnswer}。`,
+  `《论嘲笑的1001种》 ${correctAnswer}。`,
+  `《难度太低》正确答案是 ${correctAnswer}。`,
+  `这么简单的题谁不会？正确答案是 ${correctAnswer}。`
+];
+
+if (isNaN(userAnswerNum) || userAnswerNum !== correctAnswer) {
+  // 随机选择一种错误提示信息并展示
+  const randomIndex = Math.floor(Math.random() * errorMessages.length);
+  const errorMessage = errorMessages[randomIndex];
+  resultText.innerText = errorMessage;
+  resultText.style.color = '#f00';
+  wrongCount += 1;
+} else {
+  // 答案正确
+  resultText.innerText = '恭喜你，答案正确！';
+  resultText.style.color = '#008000';
+  correctCount += 1;
+}
+
+    // 更新正确次数、错误次数和正确率
+    document.getElementById('correct-count').innerText = correctCount;
+    document.getElementById('wrong-count').innerText = wrongCount;
+
+    if (correctCount + wrongCount > 0) {
+      accuracy = ((correctCount / (correctCount + wrongCount)) * 100).toFixed(1) + '%';
+    }
+    document.getElementById('accuracy').innerText = accuracy;
+    resultText.style.display = 'block';
+  }
+
+  // 自动生成下一个计算题
+  setTimeout(function() {
+    generateProblem();
+    // 启用提交按钮
+    document.getElementById('submit-btn').removeAttribute('disabled');
+  }, 1500); // 延迟两秒自动生成下一个计算题，让用户有时间看到上一道题是否正确
+}
+
+// 页面加载完成后自动生成一个计算题
+window.onload = function() {
+  generateProblem();
+}
+
+// 注册提交按钮的单击事件
+document.getElementById('submit-btn').addEventListener('click', function() {
+  checkAnswer();
+});
+
+// 注册用户提交答案的输入框的回车事件
+document.getElementById('user-answer').addEventListener('keydown', function(event) {
+  if (event.keyCode === 13) { // 回车键的 keyCode 是 13
+    checkAnswer();
+  }
+});
+
+// 注册用户提交答案的输入框的 blur 事件
+document.getElementById('user-answer').addEventListener('blur', function() {
+  checkAnswer();
+});
+  // 为问题的区域和计分板区域添加事件监听，阻止在空白处点击
+  let wrapper = document.querySelector('.wrapper');
+  let isTouchDevice = 'ontouchstart' in document.documentElement;
+
+  wrapper.addEventListener(isTouchDevice ? 'touchstart' : 'mousedown', function(event) {
+    if (!event.target.closest('.problem') && !event.target.closest('.score')) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  });
+
+// 为输入框添加 oninput 事件，限制输入
+document.getElementById('user-answer').addEventListener('input', function(event) {
+  let input = event.target.value.trim().toLowerCase();
+  let regExp = /^-?[\d-]*$|cheating|code/;
+  if (regExp.test(input)) { // 如果输入符合要求，则将 input 元素标记为有效
+    event.target.classList.remove('invalid');
+  } else { // 否则标记为无效
+    event.target.classList.add('invalid');
+  }
+});
+		</script>
+</body>
+</html>

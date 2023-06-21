@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>贪吃蛇小游戏</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f9f9f9;
+    }
+
+    #canvas {
+      border: 1px solid #ccc;
+      background-color: #fff;
+    }
+
+    #score {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    #btn-left,
+    #btn-up,
+    #btn-down,
+    #btn-right {
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 20px;
+      background-color: #4caf50;
+      color: #fff;
+      font-size: 20px;
+      text-align: center;
+      position: absolute;
+      bottom: 20px;
+    }
+
+    #btn-left {
+      left: 20px;
+    }
+
+    #btn-up {
+      left: 80px;
+    }
+
+    #btn-down {
+      left: 80px;
+      bottom: 70px;
+    }
+
+    #btn-right {
+      left: 140px;
+    }
+
+    #start-btn {
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 20px;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    .controls {
+  display: flex;
+  justify-content: center;
+}
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas" width="300" height="300"></canvas>
+  <div id="score"></div>
+  <button id="start-btn">开始游戏</button>
+<div class="controls">
+  <button id="btn-up" class="btn-arrow" tabindex="1">↑<i class="fas fa-arrow-up"></i></button>
+  </br>
+  <button id="btn-left" class="btn-arrow" tabindex="1">←<i class="fas fa-arrow-left"></i></button>
+  <button id="btn-down" class="btn-arrow" tabindex="1">↓<i class="fas fa-arrow-down"></i></button>
+  <button id="btn-right" class="btn-arrow" tabindex="1">→<i class="fas fa-arrow-right"></i></button>
+</div>
+  <script>
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+var snake_body = [{
+        x: 150,
+        y: 150
+    },
+    {
+        x: 140,
+        y: 150
+    },
+    {
+        x: 130,
+        y: 150
+    }
+];
+
+var direction = "";
+var food = [];
+var score = 0;
+var colors = ['#f1c40f', '#3498db', '#8e44ad', '#e74c3c'];
+
+var game = null;
+
+function getRandomColor() {
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function start_game() {
+  clearInterval(game);
+  direction = "right";
+  score = 0;
+  snake_body = [{
+        x: 150,
+        y: 150
+    },
+    {
+        x: 140,
+        y: 150
+    },
+    {
+        x: 130,
+        y: 150
+    }
+  ];
+  document.getElementById('score').innerHTML = "得分: " + score;
+  food = [{
+        x: Math.floor(Math.random() * 30) * 10,
+        y: Math.floor(Math.random() * 30) * 10,
+        color: getRandomColor()
+    },
+    {
+        x: Math.floor(Math.random() * 30) * 10,
+        y: Math.floor(Math.random() * 30) * 10,
+        color: getRandomColor()
+    },
+    {
+        x: Math.floor(Math.random() * 30) * 10,
+        y: Math.floor(Math.random() * 30) * 10,
+        color: getRandomColor()
+    }
+  ];
+  game = setInterval(move_snake, 45);
+}
+
+
+function draw_food() {
+    for (var i = 0; i < food.length; i++) {
+        ctx.fillStyle = food[i].color;
+        ctx.fillRect(food[i].x, food[i].y, 9, 9);
+    }
+}
+
+function create_food() {
+  for (var i = 0; i < food.length; i++) {
+      food[i].x = Math.floor(Math.random() * 30) * 10;
+      food[i].y = Math.floor(Math.random() * 30) * 10;
+      food[i].color = getRandomColor();
+  }
+}
+
+function draw_snake() {
+  for (var i = 0; i < snake_body.length; i++) {
+    var body_color = "#333";
+    if (i == 0) {
+      body_color = "#00FF00";
+    }
+    ctx.fillStyle = body_color;
+    ctx.fillRect(snake_body[i].x, snake_body[i].y, 9, 9);
+    ctx.strokeStyle = "#333";
+    ctx.strokeRect(snake_body[i].x, snake_body[i].y, 9, 9);
+  }
+}
+
+function change_direction(event) {
+  switch (event.keyCode) {
+    case 37:
+      if (direction != "right" && direction != "left") {
+        direction = "left";
+      }
+      break;
+    case 38:
+      if (direction != "down" && direction != "up") {
+        direction = "up";
+      }
+      break;
+    case 39:
+      if (direction != "left" && direction != "right") {
+        direction = "right";
+      }
+      break;
+    case 40:
+      if (direction != "up" && direction != "down") {
+        direction = "down";
+      }
+      break;
+  }
+}
+
+function move_snake() {
+  var new_head = {
+    x: snake_body[0].x,
+    y: snake_body[0].y
+  };
+
+  switch (direction) {
+    case "left":
+      new_head.x -= 10;
+      break;
+    case "up":
+      new_head.y -= 10;
+      break;
+    case "right":
+      new_head.x += 10;
+      break;
+    case "down":
+      new_head.y += 10;
+      break;
+  }
+
+  for (var i = 1; i < snake_body.length; i++) {
+    if (new_head.x == snake_body[i].x && new_head.y == snake_body[i].y) {
+      gameOver();
+      return;
+    }
+  }
+
+  if (new_head.x < 0 || new_head.x > 290 || new_head.y < 0 || new_head.y > 290) {
+    gameOver();
+    return;
+  }
+
+  snake_body.unshift(new_head);
+
+  var should_delete_tail = true;
+
+  for (var i = 0; i < food.length; i++) {
+    if (new_head.x == food[i].x && new_head.y == food[i].y) {
+      score += 10;
+      document.getElementById('score').innerHTML = "得分：" + score;
+      food.splice(i, 1);
+      create_food();
+      should_delete_tail = false;
+      food.push({
+        x: Math.floor(Math.random() * 30) * 10,
+        y: Math.floor(Math.random() * 30) * 10,
+        color: getRandomColor()
+      });
+    }
+  }
+
+  if (should_delete_tail) {
+    snake_body.pop();
+  }
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  draw_food();
+  draw_snake();
+}
+function gameOver() {
+  clearInterval(game);
+  alert("游戏结束，得分：" + score + "分");
+  direction = "";
+  create_food();
+  score = 0;
+  document.getElementById('score').innerHTML = "得分: " + score;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  snake_body = [{
+        x: 150,
+        y: 150
+      },
+      {
+        x: 140,
+        y: 150
+      },
+      {
+        x: 130,
+        y: 150
+      }
+  ];
+  draw_snake();
+}
+
+create_food();
+draw_snake();
+
+document.addEventListener("keydown", change_direction);
+
+var btn_left = document.getElementById("btn-left");
+var btn_up = document.getElementById("btn-up");
+var btn_down = document.getElementById("btn-down");
+var btn_right = document.getElementById("btn-right");
+
+btn_left.addEventListener("click", function() {
+  if (direction != "right" && direction != "left") {
+    direction = "left";
+  }
+});
+
+btn_up.addEventListener("click", function() {
+  if (direction != "down" && direction != "up") {
+    direction = "up";
+  }
+});
+
+btn_down.addEventListener("click", function() {
+  if (direction != "up" && direction != "down") {
+    direction = "down";
+  }
+});
+
+btn_right.addEventListener("click", function() {
+  if (direction != "left" && direction != "right") {
+    direction = "right";
+  }
+});
+
+var start_btn = document.getElementById("start-btn");
+start_btn.addEventListener("click", start_game);
+  </script>
+</body>
+
+</html>
